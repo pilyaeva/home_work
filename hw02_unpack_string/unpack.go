@@ -14,11 +14,16 @@ func Unpack(sourceString string) (string, error) {
 	previousChar := rune(0)
 	isPreviousSlash := false
 	isPreviousRealDigit := true
+	isSpecSymbol := false
 
 	for _, currentChar := range sourceString {
 		if previousChar == '\\' && currentChar == '\\' && !isPreviousSlash {
 			isPreviousSlash = true
 			resultStr.WriteRune(previousChar)
+		} else if (currentChar == '\\' || currentChar == 't' || currentChar == 'n' || currentChar == 'r' || currentChar == 'a' || currentChar == 'b' || currentChar == 'f') && previousChar == '\\' && !isPreviousSlash {
+			isSpecSymbol = true
+			resultStr.WriteRune('\\')
+			resultStr.WriteRune(currentChar)
 		} else if unicode.IsDigit(currentChar) && previousChar == '\\' && !isPreviousSlash {
 			resultStr.WriteRune(currentChar)
 			isPreviousRealDigit = false
@@ -30,7 +35,7 @@ func Unpack(sourceString string) (string, error) {
 
 				digit := currentChar - '0'
 
-				if isPreviousSlash || !isPreviousRealDigit {
+				if isPreviousSlash || !isPreviousRealDigit || isSpecSymbol {
 					digit--
 				}
 
@@ -40,12 +45,17 @@ func Unpack(sourceString string) (string, error) {
 
 				isPreviousRealDigit = true
 
-				resultStr.WriteString(strings.Repeat(string(previousChar), int(digit)))
+				if isSpecSymbol {
+					resultStr.WriteString(strings.Repeat("\\"+string(previousChar), int(digit)))
+				} else {
+					resultStr.WriteString(strings.Repeat(string(previousChar), int(digit)))
+				}
 			} else if previousChar != 0 && !unicode.IsDigit(previousChar) && !isPreviousSlash {
 				resultStr.WriteRune(previousChar)
 			}
 
 			isPreviousSlash = false
+			isSpecSymbol = false
 		}
 
 		previousChar = currentChar
