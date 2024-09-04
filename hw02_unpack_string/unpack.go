@@ -57,7 +57,7 @@ func Unpack(sourceString string) (string, error) {
 		return "", ErrInvalidString
 	}
 
-	if previousChar != 0 && !unicode.IsDigit(previousChar) {
+	if previousChar != 0 && !unicode.IsDigit(previousChar) && !isPreviousSlash {
 		resultStr.WriteRune(previousChar)
 	}
 
