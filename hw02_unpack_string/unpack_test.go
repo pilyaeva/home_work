@@ -25,6 +25,7 @@ func TestUnpack(t *testing.T) {
 		{input: "d\n5abc", expected: "d\n\n\n\n\nabc"},
 		{input: `\4`, expected: "4"},
 		{input: `\\`, expected: `\`},
+		{input: `\\\\`, expected: `\\`},
 	}
 
 	for _, tc := range tests {
@@ -38,7 +39,7 @@ func TestUnpack(t *testing.T) {
 }
 
 func TestUnpackInvalidString(t *testing.T) {
-	invalidStrings := []string{"3abc", "45", "aaa10b", `aaa\n`, `aab\`, `\🌏`}
+	invalidStrings := []string{"3abc", "45", "aaa10b", `aaa\n`, `aab\`, `\🌏`, `\\\`}
 	for _, tc := range invalidStrings {
 		tc := tc
 		t.Run(tc, func(t *testing.T) {
