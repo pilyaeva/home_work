@@ -12,21 +12,26 @@ type kv struct {
 }
 
 func Top10(sourceText string) []string {
-	re := regexp.MustCompile(`\s+`)
-	textWithoutExtraSpaces := re.ReplaceAllString(sourceText, " ")
+	textWithoutUpperCase := strings.ToLower(sourceText)
 
-	if textWithoutExtraSpaces == "" {
+	re := regexp.MustCompile(`\s+`)
+	textWithoutExtraSpacesAndUpperCase := re.ReplaceAllString(textWithoutUpperCase, " ")
+
+	if textWithoutExtraSpacesAndUpperCase == "" {
 		return []string{}
 	}
 
-	words := strings.Split(textWithoutExtraSpaces, " ")
+	words := strings.Split(textWithoutExtraSpacesAndUpperCase, " ")
 	repeats := make(map[string]int)
 
 	for _, word := range words {
-		repeats[word]++
+		trimmedWord := strings.Trim(word, ".,'!?():;\"")
+		if trimmedWord != "" && trimmedWord != "-" {
+			repeats[trimmedWord]++
+		}
 	}
 
-	var sortedData []kv
+	sortedData := make([]kv, 0)
 
 	for k, v := range repeats {
 		sortedData = append(sortedData, kv{Key: k, Value: v})
