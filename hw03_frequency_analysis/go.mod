@@ -1,4 +1,4 @@
-module github.com/pilyaeva/hw03_frequency_analysis
+module github.com/pilyaeva/home_work/hw03_frequency_analysis
 
 go 1.22
 
