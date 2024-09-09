@@ -94,13 +94,15 @@ func TestTop10(t *testing.T) {
 	t.Run("Hi , go ,. hi , ga! , :)", func(t *testing.T) {
 		expected := []string{
 			"hi",
+			",.",
+			":-)",
 			"ga",
 			"go",
 		}
-		require.Equal(t, expected, Top10("Hi , go ,. hi , ga! , :)"))
+		require.Equal(t, expected, Top10("Hi , go ,. hi , ga! -------hi------- , :-)"))
 	})
 
-	t.Run("dog,cat, dog...cat, dogcat! (dog...cat)", func(t *testing.T) {
+	t.Run("dog,cat, dog...cat, dogcat! (dog...cat) - dog...cat", func(t *testing.T) {
 		expected := []string{
 			"dog...cat",
 			"dog,cat",

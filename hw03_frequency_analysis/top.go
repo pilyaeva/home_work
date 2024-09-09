@@ -25,7 +25,12 @@ func Top10(sourceText string) []string {
 	repeats := make(map[string]int)
 
 	for _, word := range words {
-		trimmedWord := strings.Trim(word, ".,'!?():;\"")
+		trimmedWord := strings.Trim(word, ".,'!?():;\"-")
+
+		if trimmedWord == "" && len(word) > 1 {
+			trimmedWord = word
+		}
+
 		if trimmedWord != "" && trimmedWord != "-" {
 			repeats[trimmedWord]++
 		}
